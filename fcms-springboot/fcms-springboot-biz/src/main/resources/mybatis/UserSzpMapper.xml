@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.yhlt.showcase.system.dao.UserSzpMBDAO">
+	
+	<sql id="findByParams_where">
+		<where>
+			c.id = u.company_id
+			<if test="userName!=null and userName!=''">
+				<![CDATA[and u.name LIKE CONCAT('%',#{userName},'%')]]>
+			</if>
+			<if test="companyName!=null and companyName!=''">
+				<![CDATA[and u.company_id = #{companyName}]]>
+			</if>
+			<if test="departmentName!=null and departmentName!=''">
+				<![CDATA[and u.department_id = #{departmentName}]]>
+			</if>
+			<if test="userBirthday!=null and userBirthday!=''">
+				<![CDATA[and u.BIRTHDAY = #{userBirthday}]]>
+			</if>
+			<if test="minAge!=null and minAge!=''">
+				<![CDATA[and DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.BIRTHDAY)),'%Y')+0 > #{minAge}]]>
+			</if>
+			<if test="maxAge!=null and maxAge!=''">
+				<![CDATA[and DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.BIRTHDAY)),'%Y')+0 < #{maxAge}]]>
+			</if>
+			and d.id = u.department_id
+		</where>
+	</sql>
+	
+	<!-- 查询用户,演示: 1.输入用map传入多个参数 2.<where>语句, 智能添加where和and关键字 3.输出直接映射对象
+	分页条件查询方法 -->
+	<select id="findUser" parameterType="map" resultType="UserSzpDto">
+		SELECT DISTINCT
+			u.id AS id,
+			u.LOGIN_NAME AS userName,
+			c.`NAME` AS companyName,
+			d.`NAME` AS departmentName,
+			u.BIRTHDAY AS userBirthday,
+			DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.BIRTHDAY)),'%Y')+0 AS age
+		FROM 
+			tc_system_user u,
+			tc_system_company c,
+			tc_system_department d
+		<include refid="findByParams_where"/>
+		ORDER BY ${sortName} ${sortOrder} LIMIT ${sum},${rows}
+	</select>
+	<!-- 查询总记录 -->
+	<select id="count" parameterType="map" resultType="java.lang.Long">
+		SELECT DISTINCT
+			count(u.id)
+		FROM 
+			tc_system_user u,
+			tc_system_company c,
+			tc_system_department d
+		<include refid="findByParams_where"/>
+	</select>
+</mapper>

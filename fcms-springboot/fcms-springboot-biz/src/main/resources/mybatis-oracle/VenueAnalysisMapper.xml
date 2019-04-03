@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.yhlt.showcase.venue.dao.VenueAnalysisMBDAO">
+	<sql id="findByParams_where">
+		<where>
+			1=1
+			<if test ="venueId!=null and venueId!=''"> 
+				<![CDATA[and ve.venue_id = #{venueId}]]>
+			</if>
+		</where>
+	</sql>
+	<!-- 查询用户,演示: 1.输入用map传入多个参数 2.<where>语句, 智能添加where和and关键字 3.输出直接映射对象
+	分页条件查询方法 -->
+	<select id="findVenueAnalysisData" parameterType="map" resultType ="VenueAnalysisDto">
+		SELECT VE."ID" as id,VE.VENUE_ID as venueId,VE."NAME" as equipmentName,
+		(SELECT "COUNT"(1) FROM TM_ORDER_MAIN tom WHERE TOM.EQUIPMENT_ID=VE."ID" AND to_char(tom.order_time,'dd')=to_char(("TO_DATE"(#{dateDay}, 'yyyy-mm-dd')),'dd') and to_char(tom.order_time,'mm')=to_char(("TO_DATE"(#{dateDay}, 'yyyy-mm-dd')),'mm') GROUP BY TOM.EQUIPMENT_ID)AS todayCnt,
+		(SELECT "COUNT"(1) FROM TM_ORDER_MAIN tom WHERE TOM.EQUIPMENT_ID=VE."ID" AND to_char(tom.order_time,'iw')=to_char(("TO_DATE"(#{dateDay}, 'yyyy-mm-dd')),'iw') and to_char(tom.order_time,'mm')=to_char(("TO_DATE"(#{dateDay}, 'yyyy-mm-dd')),'mm') GROUP BY TOM.EQUIPMENT_ID)AS weekCnt,
+		(SELECT "COUNT"(1) FROM TM_ORDER_MAIN tom WHERE TOM.EQUIPMENT_ID=VE."ID" AND to_char(tom.order_time,'mm')=to_char(("TO_DATE"(#{dateDay}, 'yyyy-mm-dd')),'mm') GROUP BY TOM.EQUIPMENT_ID)AS monthCnt
+ 		FROM TM_FCMS_VENUE_EQUIPMENT_TYPE ve 
+		<include refid="findByParams_where"/>
+	</select>
+</mapper>

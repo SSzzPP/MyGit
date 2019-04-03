@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 根据计划id查用户 -->
+<mapper namespace="com.yhlt.showcase.survey.dao.SurveyRecordTotalMBDAO">
+	<sql id="findByParams_where">
+			<if test="paperId!=null and paperId!=''"> 
+			<![CDATA[paper_id = #{paperId} and ]]>
+			</if>
+	</sql>
+	<!-- 查询用户,演示: 1.输入用map传入多个参数 2.<where>语句, 智能添加where和and关键字 3.输出直接映射对象 分页条件查询方法 -->
+<!-- 	<select id="findByParams" parameterType="map" resultType="SurveyRecordTotalDto">
+		select t2.*,t3.options_nums optionsNums from ( select t1.question_id,count(t1.user_answer) total, sum(if(t1.user_answer like '%A%', 1, 0)) A,
+		sum(if(t1.user_answer like '%B%', 1, 0)) B ,
+		sum(if(t1.user_answer like '%C%', 1, 0)) C ,
+		sum(if(t1.user_answer like '%D%', 1, 0)) D ,
+		sum(if(t1.user_answer like '%E%', 1, 0)) E ,
+		sum(if(t1.user_answer like '%F%', 1, 0)) F ,
+		sum(if(t1.user_answer like '%G%', 1, 0)) G ,
+		sum(if(t1.user_answer like '%H%', 1, 0)) H ,
+		sum(if(t1.user_answer like '%I%', 1, 0)) I ,
+		sum(if(t1.user_answer like '%J%', 1, 0)) J ,
+		sum(if(t1.user_answer like '%K%', 1, 0)) K ,
+		sum(if(t1.user_answer like '%L%', 1, 0)) L ,
+		sum(if(t1.user_answer like '%M%', 1, 0)) M ,
+		sum(if(t1.user_answer like '%N%', 1, 0)) N 
+		from( select * from TM_FCMS_SURVEY_RECORD where 
+		<include refid="findByParams_where" /> 
+		 user_answer is not null) t1 GROUP BY t1.question_id) t2 LEFT JOIN TM_FCMS_SURVEY_QUESTION t3 ON t2.question_id=t3.id
+	</select> -->
+	<select id="findByParams" parameterType="map" resultType="SurveyRecordTotalDto">
+		SELECT
+			T2.*, T3.OPTIONS_NUMS OPTIONSNUMS
+		FROM
+			(
+				SELECT
+					T1.QUESTION_ID,
+					COUNT (T1.USER_ANSWER) TOTAL,
+		
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%A%' THEN 1 ELSE 0 END) AS A,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%B%' THEN 1 ELSE 0 END) AS B,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%C%' THEN 1 ELSE 0 END) AS C,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%D%' THEN 1 ELSE 0 END) AS D,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%E%' THEN 1 ELSE 0 END) AS E,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%F%' THEN 1 ELSE 0 END) AS F,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%G%' THEN 1 ELSE 0 END) AS G,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%H%' THEN 1 ELSE 0 END) AS H,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%I%' THEN 1 ELSE 0 END) AS I,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%J%' THEN 1 ELSE 0 END) AS J,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%K%' THEN 1 ELSE 0 END) AS K,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%L%' THEN 1 ELSE 0 END) AS L,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%M%' THEN 1 ELSE 0 END) AS M,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%N%' THEN 1 ELSE 0 END) AS N,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%O%' THEN 1 ELSE 0 END) AS O,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%P%' THEN 1 ELSE 0 END) AS P,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%Q%' THEN 1 ELSE 0 END) AS Q,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%R%' THEN 1 ELSE 0 END) AS R,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%S%' THEN 1 ELSE 0 END) AS S,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%T%' THEN 1 ELSE 0 END) AS T,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%U%' THEN 1 ELSE 0 END) AS U,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%V%' THEN 1 ELSE 0 END) AS V,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%W%' THEN 1 ELSE 0 END) AS W,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%X%' THEN 1 ELSE 0 END) AS X,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%Y%' THEN 1 ELSE 0 END) AS Y,
+					SUM(CASE WHEN T1.USER_ANSWER LIKE '%Z%' THEN 1 ELSE 0 END) AS Z
+				FROM
+					(
+						SELECT
+							*
+						FROM
+							TM_FCMS_SURVEY_RECORD
+						WHERE
+							PAPER_ID = 8
+						AND USER_ANSWER IS NOT NULL
+					) T1
+				GROUP BY
+					T1.QUESTION_ID
+			) T2
+		LEFT JOIN TM_FCMS_SURVEY_QUESTION T3 ON T2.QUESTION_ID = T3. ID
+	</select>
+</mapper>

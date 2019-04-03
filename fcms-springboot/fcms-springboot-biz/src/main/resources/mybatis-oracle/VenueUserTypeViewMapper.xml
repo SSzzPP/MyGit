@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 根据计划id查用户 -->
+<mapper namespace="com.yhlt.showcase.venue.dao.VenueUserTypeViewMBDAO">
+	<select id="findTypeUser" parameterType="java.util.List" resultType="VenueUserTypeViewDto">
+		select distinct v.ID, v.LOGIN_NAME, v."NAME" from V_FCMS_VENUE_USER_TYPE v where v.TYPE_ID  in(
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		 )and v."TYPE" = 2
+	</select>
+</mapper>

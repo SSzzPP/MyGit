@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.yhlt.showcase.requestLog.dao.RequestLogMBDAO">
+<insert id="saveRequestLogException" parameterType="map">
+	insert into TC_SYSTEM_REQUEST_LOG(
+			ID,
+			REQUEST_IP,
+			REQUEST_URL,
+			REQUEST_TOTAL_TIME,
+			REQUEST_METHOD,
+			CLASS_NAME,
+			METHOD_NAME,
+			CODE,
+			PARAMS,
+			RESULT,
+			HAS_EXCEPTION,
+			EXCEPTION_MSG,
+			CREATE_BY_ID,
+			GMT_CREATE
+	)
+ 	values(
+ 			SEQ_SYS_FCMS.nextval,
+ 			#{requestIp},
+ 			#{requestUrl},
+ 			#{requestTotalTime},
+ 			#{requestMethod},
+ 			#{className},
+ 			#{methodName},
+ 			#{code},
+ 			#{params},
+ 			#{resultStr},
+ 			#{hasException},
+ 			#{exceptionMsg},
+ 			#{userId},
+ 			#{gmtCreate}
+ 	)
+</insert>
+
+</mapper>

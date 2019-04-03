@@ -1,0 +1,2 @@
+#dev production test
+spring.profiles.active=dev

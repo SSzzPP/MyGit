@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.yhlt.showcase.order.dao.OrderLastMBDAO">
+
+<select id="findLastOrder" resultType="java.lang.Long" parameterType="java.lang.Long">
+	SELECT
+		SUM(1)
+	FROM
+		TM_ORDER_MAIN T
+	WHERE
+		<![CDATA[YEARWEEK(date_format(t.ORDER_TIME,'%Y-%m-%d')) = YEARWEEK(now(),0)-2]]>
+	AND 
+		T.STATUS = 1 
+	AND 
+		t.CREATE_BY_ID = #{userId}
+	
+	UNION ALL
+	
+	SELECT
+		SUM(1)
+	FROM
+		TM_ORDER_MAIN T
+	WHERE
+		<![CDATA[YEARWEEK(date_format(t.ORDER_TIME,'%Y-%m-%d')) = YEARWEEK(now(),0)-1]]>
+	AND 
+		T .STATUS = 1 AND t.CREATE_BY_ID = #{userId}
+	
+	UNION ALL
+	
+	select 
+		SUM(1)
+	from 
+		TM_ORDER_MAIN T
+	where 
+		YEARWEEK(date_format(t.ORDER_TIME,'%Y-%m-%d')) = YEARWEEK(now()) AND T .STATUS = 1 AND t.CREATE_BY_ID = #{userId}
+	
+</select>
+
+</mapper>

@@ -1,0 +1,4 @@
+﻿#dev
+#production
+#test
+java -jar xxx.jar --spring.profiles.active=dev

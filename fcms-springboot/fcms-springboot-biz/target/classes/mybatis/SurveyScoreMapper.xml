@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 根据计划id查用户 -->
+<mapper namespace="com.yhlt.showcase.survey.dao.SurveyScoreTotalMBDAO">
+	<sql id="findByParams_where">
+			<if test="paperId!=null and paperId!=''"> 
+			<![CDATA[ and t1.paper_id = #{paperId}]]>
+			</if>
+			<if test="userId!=null and userId!=''"> 
+			<![CDATA[ and t1.user_id =#{userId}]]>
+			</if>
+	</sql>
+	<sql id="findByParams_where_paper_user">
+			<if test="paperId!=null and paperId!=''"> 
+			<![CDATA[ and t6.paper_id = #{paperId}]]>
+			</if>
+	</sql>
+	<sql id="findByParams_where_user">
+			<if test="keyword!=null and keyword!=''"> 
+			<![CDATA[ where t4.name LIKE CONCAT('%',#{keyword},'%')]]>
+			</if>
+	</sql>
+	<sql id="findByUserId">
+			<if test="userId!=null and userId!=''"> 
+			<![CDATA[ and t1.user_id =#{userId}]]>
+			</if>
+	</sql>
+	<sql id="pagination">
+	    <if test="endRow!=null and endRow!='' ">
+	  		<![CDATA[ limit #{startRow},#{endRow} ]]>
+	  	</if>
+	</sql>
+	<!-- 查询用户,演示: 1.输入用map传入多个参数 2.<where>语句, 智能添加where和and关键字 3.输出直接映射对象 分页条件查询方法 -->
+	<select id="findByParams" parameterType="map" resultType="SurveyScoreDto">
+		select t3.user_id as userId,t3.score,t4.name,t4.mobile,t4.login_name from( select * from( select t1.user_id,count(t1.id) score from TM_FCMS_SURVEY_RECORD t1 
+		LEFT JOIN TM_FCMS_SURVEY_QUESTION t2 on t1.question_id=t2.id
+		where t1.user_answer=t2.answer
+		<include refid="findByParams_where" /> 
+		 GROUP BY user_id ORDER BY score DESC 
+		 )t5
+		 UNION ALL
+		select t6.user_id,0 as score from TM_FCMS_SURVEY_PAPER_USER t6 WHERE t6.status=0
+		<include refid="findByParams_where_paper_user" /> 
+		 ) t3 LEFT JOIN TM_FCMS_VENUE_USER t4
+		ON t3.user_id=t4.id  
+		<include refid="findByParams_where_user" /> 
+		<include refid="pagination" />
+	</select>
+	<select id="findByUserAndPaper" parameterType="map" resultType="SurveyScoreDto">
+		select t3.user_id as userId,t3.score,t4.name,t4.mobile,t4.login_name from( select t1.user_id,count(t1.id) score from TM_FCMS_SURVEY_RECORD t1 
+		LEFT JOIN TM_FCMS_SURVEY_QUESTION t2 on t1.question_id=t2.id
+		where t1.user_answer=t2.answer
+		<include refid="findByParams_where" /> 
+		 GROUP BY user_id ORDER BY score DESC 
+		 )t3 LEFT JOIN TM_FCMS_VENUE_USER t4
+		ON t3.user_id=t4.id  
+	</select>
+</mapper>

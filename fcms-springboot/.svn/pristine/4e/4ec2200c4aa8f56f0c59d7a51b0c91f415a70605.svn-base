@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info"> 
+    <properties>
+        <property name="LOG_HOME">C:/logs</property>
+        <property name="FILE_NAME">log</property>
+        <!-- <property name="PATTERN">%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</property> -->
+        <property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} |-%-5level [%thread] %c [%L] -| %msg%n</property>
+    </properties>
+
+
+    <Appenders>  
+        <Console name="Console" target="system_out">  
+            <PatternLayout pattern="${PATTERN}" />  
+        </Console>
+
+        <RollingRandomAccessFile name="RollingRandomAccessFile" fileName="${LOG_HOME}/${FILE_NAME}.log" filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingRandomAccessFile>
+
+        <Async name="AsyncAppender">
+            <AppenderRef ref="RollingRandomAccessFile"/>
+        </Async>
+    </Appenders>  
+
+    <Loggers>  
+        <logger name="com.roncoo.education" level="info" />
+        <root level="info">  
+            <AppenderRef ref="AsyncAppender" />  
+            <AppenderRef ref="Console" />  
+        </root>  
+    </Loggers>
+</Configuration>

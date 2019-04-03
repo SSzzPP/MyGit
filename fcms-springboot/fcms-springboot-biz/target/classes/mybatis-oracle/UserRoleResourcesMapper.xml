@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.yhlt.showcase.system.dao.UserRoleResourcesMBDAO">
+	
+	
+	<sql id="findByParams_where">
+		<where>
+			t.delete_flag=0 
+			and t.flag = #{resourceFlag}
+			<if test ="userId!=null and userId!=''"> 
+				<![CDATA[and p.id = #{userId}]]>
+			</if>
+			AND (t.id = m.resource_id)
+			AND (m.role_id = n.id)
+			AND (n.id = o.role_id)
+			AND (o.user_id = p.id)
+		</where>
+	</sql>
+	<!-- 查询用户,演示: 1.输入用map传入多个参数 2.<where>语句, 智能添加where和and关键字 3.输出直接映射对象
+	分页条件查询方法 -->
+	<select id="findUserRoleResource" parameterType="map" resultType="UserRoleResourceDto">
+		SELECT DISTINCT
+			t.id AS id,
+			t.name AS name,
+			t.description AS description,
+			t.url AS url,
+			t.sort_number AS sortNumber,
+			t.type AS type,
+			t.delete_flag AS deleteFlag,
+			t.parent_id AS parentId,
+			t.icon AS icon,
+			p.id AS userId,
+			t.code AS code,
+			t.flag AS flag,
+			t.gmt_create AS gmtCreate,
+			t.create_by_id AS createById,
+			t.gmt_modified AS gmtModified,
+			t.last_modified_by_id AS lastModifiedById
+		FROM
+			tc_system_resources t,
+			tr_system_role_resource m, 
+			tc_system_role n,
+			tr_system_role_user o,
+			tc_system_user p
+		<include refid="findByParams_where"/>
+	</select>
+	
+</mapper>

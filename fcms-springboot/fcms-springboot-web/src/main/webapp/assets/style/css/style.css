@@ -1,0 +1,98 @@
+.padd15 {
+	padding: 15px;
+}
+.card-button{
+	padding:15px 15px 5px;
+	border-bottom: 1px solid #f6f6f6;
+}
+.combo-panel {
+    background-color: #ffffff;
+    border: 1px solid #d2d2d2;
+    box-shadow: 0 2px 4px rgba(0,0,0,.12);
+}
+.datagrid-htable, .datagrid-btable, .datagrid-ftable {
+    color: #666;
+}
+.ovh .datagrid-body{
+	overflow-x:hidden;
+}
+.datagrid-body{
+	margin-bottom:-1px;
+	margin-right: -1px;
+}
+.datagrid-header{
+	margin-right: -1px;
+}
+.datagrid .panel-body {
+  	border:1px solid #e6e6e6;
+}
+.datagrid-cell-rownumber{
+	color:#666;
+}
+.datagrid-header, .datagrid-td-rownumber {
+    background-color: #f2f2f2;
+}
+.datagrid-header td, .datagrid-body td, .datagrid-footer td {
+	border-color: #e6e6e6;
+    border-width:0 1px 1px 0;
+    border-style: solid;
+}
+.datagrid-view2 td:last-child{
+	border-right:0;
+}
+.datagrid-row:not(.datagrid-row-selected):hover {
+    background: #f2f2f2;
+}
+.datagrid-header, .datagrid-toolbar, .datagrid-pager, .datagrid-footer-inner {
+    border-color: #e6e6e6;
+}
+.datagrid-toolbar, .datagrid-pager {
+    background: #f2f2f2;
+}
+.datagrid-cell, .datagrid-cell-group{
+	padding:0 15px;
+}
+.datagrid-header .datagrid-cell span {
+    font-size: 14px;
+    font-weight: 400;
+    color:#666;
+}
+.form-horizontal{
+	border-bottom: 1px solid #f6f6f6
+}
+.form-horizontal input,.form-horizontal select,.form-horizontal textarea{
+	height: 38px;
+    line-height: 38px;
+    border: 1px solid #e6e6e6;
+    background-color: #fff;
+    border-radius: 2px;
+    padding-left: 10px;
+}
+.form-horizontal input:focus,.form-horizontal textarea:focus,.form-horizontal select:focus{
+    border-color: #C9C9C9!important;
+}
+.form-horizontal td{
+	font-size:14px;
+	color:#333;
+	font-weight:400;
+}
+.searchTable{
+	border-collapse: separate;
+	border-spacing: 5px; 
+	height:69px; 
+	align: left; 
+	border: 0; 
+	cellpadding: 0;
+	width:100%;
+}
+.searchTable td:first-child{
+	color:#333;
+	font-weight:400;
+	font-size:14px;
+	width:40%;
+}
+.searchTable td:last-child select{
+	width:60%;
+	height: 26px;
+	background-image: none;
+}

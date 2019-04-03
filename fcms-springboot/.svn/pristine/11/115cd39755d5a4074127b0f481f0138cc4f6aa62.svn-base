@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration   
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+        <setting name="cacheEnabled" value="true"/> 
+    </settings>
+
+	<typeAliases>
+		<typeAlias alias="UserRoleResourceDto" type="com.yhlt.showcase.system.dto.UserRoleResourceDto"/>
+		<typeAlias alias="SurveyRecordTotalDto" type="com.yhlt.showcase.survey.dto.SurveyRecordTotalDto"/>
+		<typeAlias alias="SurveyScoreDto" type="com.yhlt.showcase.survey.dto.SurveyScoreDto"/>
+		<typeAlias alias="VenueUserTypeViewDto" type="com.yhlt.showcase.venue.dto.VenueUserTypeViewDto"/>
+		<typeAlias alias="VenueAnalysisDto" type="com.yhlt.showcase.venue.dto.VenueAnalysisDto"/>
+		<typeAlias alias="SportChannelDto" type="com.yhlt.showcase.subscribe.dto.SportChannelDto"/>
+	</typeAliases>
+</configuration>

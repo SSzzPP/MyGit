@@ -1,0 +1,24 @@
+<decorators defaultdir="/decorators">
+	<excludes>
+		<pattern>/assets/ueditor/*</pattern>
+		<pattern>/assets/layuiadmin/*</pattern>
+		<pattern>/login</pattern>
+		<pattern>/login/*</pattern>
+		<pattern>/user_login.jsp</pattern>
+		<pattern>/register</pattern>
+		<pattern>/register/*</pattern>
+		<pattern>/user_register.jsp</pattern>
+		<pattern>/forget</pattern>
+		<pattern>/forget/*</pattern>
+		<pattern>/user_forgetPassword.jsp</pattern>
+		<pattern>/error.jsp</pattern>
+		<pattern>/admin/main/portal</pattern>
+	</excludes>
+	<decorator name="default" page="main.jsp">
+		<pattern>/*</pattern>
+	</decorator>
+	<decorator name="front" page="front_main.jsp">
+		<pattern>/front*</pattern>
+		<pattern>/front/*</pattern>
+	</decorator>
+</decorators>

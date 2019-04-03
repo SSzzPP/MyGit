@@ -1,0 +1,52 @@
+package com.yhlt.showcase.front.controller.venue;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.yhlt.showcase.base.controller.BaseController;
+import com.yhlt.showcase.base.properties.EnvProperties;
+import com.yhlt.showcase.base.utils.ImageUtils;
+import com.yhlt.showcase.venue.entity.VenueUserTypeViewEntity;
+import com.yhlt.showcase.venue.service.VenueUserTypeViewService;
+
+@Controller
+@RequestMapping(value = "/front/user/view")
+public class FrontVenueUserTypeViewController extends BaseController<VenueUserTypeViewEntity, VenueUserTypeViewService> {
+	
+	@Autowired
+	private EnvProperties envProperties;
+	
+	@Override
+	public String index(Model model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	/**
+	 * 显示头像
+	 * 
+	 * @param uuid
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/showImg")
+	public void showImg(String uuid, HttpServletRequest request, HttpServletResponse response) {
+		VenueUserTypeViewEntity venueUserTypeViewEntity = service.findOneByUuid(uuid);
+
+		try {
+			if (venueUserTypeViewEntity.getImgUrl() != null) {
+				ImageUtils.imgToStream(venueUserTypeViewEntity.getImgUrl(), response);
+			} else {
+				ImageUtils.imgToStream(envProperties.getNoUserImg(), response);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+	}
+
+}

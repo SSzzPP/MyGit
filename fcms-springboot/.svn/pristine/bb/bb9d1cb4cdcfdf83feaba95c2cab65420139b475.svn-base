@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 根据计划id查用户 -->
+<mapper namespace="com.yhlt.showcase.system.dao.BigDataVisitMBDAO">
+	<sql id="findByParams_rownum">
+		tt.nowday as id,
+		tt.nowdate,
+		tt.nowday,
+		tt.webNum,
+		tt.mobileNum,
+		(tt.webNum+tt.mobileNum)/2 as avgNum
+	</sql>
+	<select id="findListbyParam" parameterType="map" resultType="BigDataVisitDto">
+		select 
+			<include refid="findByParams_rownum"/> 
+		from(
+			select 
+				t.*,IFNULL(t1.webNum,0) as webNum,IFNULL(t2.mobileNum,0) as mobileNum 
+			from (
+				select 
+					date_format(f.date,'%Y-%m-%d') as nowdate,
+					date_format(f.date,'%d') as nowday
+				FROM (
+					SELECT date_sub(now(),interval @i:=@i+1 day) as date
+					from ( 
+						select 1 union all select 1 union all select 1 union all select 1 union all 
+						select 1 union all select 1 union all select 1 union all select 1 union all 
+						select 1 union all select 1 union all select 1 union all select 1 union all 
+						select 1 union all select 1 union all select 1 union all select 1 union all 
+						select 1 union all select 1 union all select 1 union all select 1 union all 
+						select 1 union all select 1 union all select 1 union all select 1 union all 
+						select 1 union all select 1 union all select 1 union all select 1 union all 
+						select 1 union all select 1 
+					) as tmp,
+					(select @i:= -1) d
+				)f
+			)t
+			LEFT JOIN 
+			(
+				select 
+					date_format(ft.GMT_CREATE,'%Y-%m-%d') as nowdate,
+					count(1) as webNum 
+				from tc_front_total ft 
+				where date_format(ft.GMT_CREATE,'%Y%m%d') > date_sub(now(), interval 30 day)
+				GROUP BY date_format(ft.GMT_CREATE,'%Y-%m-%d')
+			)t1 on t.nowdate = t1.nowdate
+			LEFT JOIN  
+			(
+				select 
+					date_format(ll.GMT_CREATE,'%Y-%m-%d') as nowdate,
+					count(1) as mobileNum 
+				from tc_system_login_log ll 
+				where (ll.OS_NAME is null or ll.OS_NAME != 'web') and date_format(ll.GMT_CREATE,'%Y%m%d') > date_sub(now(), interval 30 day) 
+				GROUP BY date_format(ll.GMT_CREATE,'%Y-%m-%d')
+			)t2 on t.nowdate = t2.nowdate
+		)tt order by tt.nowdate
+	</select>
+</mapper>

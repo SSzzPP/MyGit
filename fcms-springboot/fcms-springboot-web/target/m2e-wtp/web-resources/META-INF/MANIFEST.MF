@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Implementation-Title: fcms-springboot-web
+Implementation-Version: 1.0
+Built-By: SSzzPP
+Implementation-Vendor-Id: com.yhlt
+Build-Jdk: 1.8.0_181
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/fcms-springboot/fcms-springboot-parent/fcms-springb
+ oot-web
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: 逸海蓝图-wyt
+

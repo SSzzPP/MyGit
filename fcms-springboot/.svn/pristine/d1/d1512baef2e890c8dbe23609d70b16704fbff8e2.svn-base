@@ -1,0 +1,33 @@
+.pagination {
+    font-size: 80% !important;
+    width: 100%;
+}
+        
+.pagination a {
+    text-decoration: none !important;
+	border: solid 1px #AAE !important;
+	color: #15B !important;
+	font-size: 11px !important;
+}
+
+.pagination a, .pagination span {
+    display: block !important;
+    float: left !important;
+    padding: 0.3em 0.5em !important;
+    margin-right: 5px !important;
+	margin-bottom: 5px !important;
+	min-width:1em !important;
+	text-align:center !important;
+}
+
+.pagination .current {
+    background: #26B !important;
+    color: #fff !important;
+	border: solid 1px #AAE !important;
+}
+
+.pagination .current.prev, .pagination .current.next{
+	color:#999 !important;
+	border-color:#999 !important;
+	background:#fff !important;
+}

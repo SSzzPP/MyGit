@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 根据计划id查用户 -->
+<mapper namespace="com.yhlt.showcase.system.dao.BigDataAgeMBDAO">
+	<sql id="findByParams_rownum">
+		ttt.id,
+		ttt.type,
+		ttt.minAge,
+		ttt.maxAge,
+		ttt.total0,
+		ttt.total1,
+		(ttt.total0+ttt.total1) as total, 
+		<!-- IFNULL(CONCAT(ROUND((ttt.total0+ttt.total1)/(select count(1) from tm_fcms_venue_user u)*100, 2),'','%'),'0.00%') as ratio, -->
+		IFNULL(CONCAT(ROUND(ttt.total0/(ttt.total0+ttt.total1)*100, 2),'','%'),'0.00%') as ratio0,
+		IFNULL(CONCAT(ROUND(ttt.total1/(ttt.total0+ttt.total1)*100, 2),'','%'),'0.00%') as ratio1 
+	</sql>
+	<sql id="findByParams_temp_tt1">
+		select 1 as id, 0 as minAge,10 as maxAge, 0 as sex0,1 as sex1,'0-10' as type
+		UNION ALL select 2,11,20,0,1,'11-20'
+		UNION ALL select 3,21,30,0,1,'21-30'
+		UNION ALL select 4,31,40,0,1,'31-40'
+		UNION ALL select 5,41,50,0,1,'41-50'
+		UNION ALL select 6,51,60,0,1,'51-60'
+		UNION ALL select 7,61,200,0,1,'61岁以上'
+		UNION ALL select 8,-1,-1,0,1,'其他'
+	</sql>
+	<sql id="findByParams_temp_tt">
+		(	select tt.minAge,max(tt.maxAge) as maxAge,tt.sex,count(1) as num from(
+				select t1.minAge,t1.maxAge,t1.sex,t2.age from(
+					select 0 as minAge,10 as maxAge, 0 as sex
+					UNION ALL select 0,10,1
+					UNION ALL select 11,20,0
+					UNION ALL select 11,20,1
+					UNION ALL select 21,30,0
+					UNION ALL select 21,30,1
+					UNION ALL select 31,40,0
+					UNION ALL select 31,40,1
+					UNION ALL select 41,50,0
+					UNION ALL select 41,50,1
+					UNION ALL select 51,60,0
+					UNION ALL select 51,60,1
+					UNION ALL select 61,200,0
+					UNION ALL select 61,200,1
+				)t1,
+				(
+					select 
+						u.sex,
+						(DATE_FORMAT(NOW(), '%Y') - DATE_FORMAT(u.birthday, '%Y') - (DATE_FORMAT(NOW(), '00-%m-%d') &lt; DATE_FORMAT(u.birthday, '00-%m-%d'))) as age 
+					from tm_fcms_venue_user u
+				)t2 
+				where (t2.age >= t1.minAge and t2.age &lt;= t1.maxAge and t2.sex = t1.sex)
+			)tt GROUP BY tt.minAge,sex
+		union all
+			select -1,-1,u.sex,count(1) from tm_fcms_venue_user u 
+			where u.birthday is null or DATE_FORMAT(u.birthday, '%Y%m%d') > DATE_FORMAT(NOW(), '%Y%m%d') 
+			GROUP BY u.sex
+		)
+	</sql>
+	<select id="findList" parameterType="map" resultType="BigDataAgeDto">
+		select 
+			<include refid="findByParams_rownum"/>
+		from(
+			select tt1.id,tt1.type,tt1.minAge,tt1.maxAge,tt1.sex0,tt1.sex1,IFNULL(tt2.num,0) as total0,IFNULL(tt3.num,0) as total1 from(
+				<include refid="findByParams_temp_tt1"/>
+			)tt1
+			LEFT JOIN
+			<include refid="findByParams_temp_tt"/> tt2 
+			on tt1.minAge = tt2.minAge and tt1.sex0 = tt2.sex
+			LEFT JOIN
+			<include refid="findByParams_temp_tt"/> tt3
+			on tt1.minAge = tt3.minAge and tt1.sex1 = tt3.sex
+		)ttt
+	</select>
+</mapper>
